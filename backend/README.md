@@ -1,73 +1,125 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+VoltRide - Electric Scooter Fleet Management 🚲⚡
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+📌 Project Overview
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+VoltRide is a fleet management system for electric scooters, designed to help:
 
-## Description
+Delivery services
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Short-term rentals
 
-## Installation
+Resellers
 
-```bash
-$ npm install
-```
+The system provides maintenance tracking, stock management, and test/demo ride scheduling while ensuring clean code practices and a scalable architecture.
 
-## Running the app
+🏗️ Tech Stack
 
-```bash
-# development
-$ npm run start
+Backend: NestJS (TypeScript, Clean Architecture) & Fastify
 
-# watch mode
-$ npm run start:dev
+Databases:
 
-# production mode
-$ npm run start:prod
-```
+PostgreSQL (structured data: maintenance, stock, scooters)
 
-## Test
+MongoDB (important logs, flexible data)
 
-```bash
-# unit tests
-$ npm run test
+Containerization: Docker & Docker Compose
 
-# e2e tests
-$ npm run test:e2e
+ORM/ODM: TypeORM (PostgreSQL) & Mongoose (MongoDB)
 
-# test coverage
-$ npm run test:cov
-```
+Testing: Jest
 
-## Support
+📁 Folder Structure
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+/backend/src
+ ├── application/        # Business logic (Use Cases, Services)
+ │    ├── scooter.service.ts
+ │    ├── maintenance.service.ts
+ │    ├── stock.service.ts
+ │
+ ├── domain/             # Entities & Schemas
+ │    ├── entities/      # PostgreSQL (TypeORM)
+ │    │    ├── scooter.entity.ts
+ │    │    ├── maintenance.entity.ts
+ │    ├── schemas/       # MongoDB (Mongoose)
+ │         ├── log.schema.ts
+ │
+ ├── infrastructure/     # Database & external services
+ │    ├── database/
+ │    │    ├── database.module.ts
+ │    │    ├── postgres/
+ │    │    │    ├── postgres.provider.ts
+ │    │    ├── mongo/
+ │    │         ├── mongo.provider.ts
+ │    ├── config/
+ │         ├── env.config.ts
+ │
+ ├── interface/          # Controllers & API endpoints
+ │    ├── controllers/
+ │    │    ├── scooter.controller.ts
+ │    │    ├── maintenance.controller.ts
+ │    ├── dto/           # Data Transfer Objects
+ │
+ ├── main.ts             # Entry point for the backend
 
-## Stay in touch
+🚀 How to Run the Project
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1️⃣ Clone the Repository
 
-## License
+git clone https://github.com/Honzikoi/VoltRide.git
+cd VoltRide/backend
 
-Nest is [MIT licensed](LICENSE).
+2️⃣ Set Up Environment Variables
+
+Create a .env file:
+
+# PostgreSQL
+DATABASE_URL=postgresql://user:password@postgres:5432/voltRideDB
+
+# MongoDB
+MONGODB_URI=mongodb://mongodb:27017/voltRideDB2
+
+3️⃣ Build & Start the Application with Docker
+
+docker-compose build --no-cache
+
+docker-compose up -d
+
+4️⃣ Run Database Seeding (Manually if Needed)
+
+docker exec -it backend-backend-1 sh -c "node dist/infrastructure/database/seed.ts"
+
+
+5️⃣ Verify Database Connections
+
+Check PostgreSQL Tables & Data
+
+docker exec -it backend-postgres-1 psql -U user -d voltRideDB -c "SELECT * FROM scooters LIMIT 10;"
+
+Check MongoDB Collections & Data
+
+docker exec -it backend-mongodb-1 mongosh -u root -p yourpassword --authenticationDatabase admin
+use voltRideDB2
+show collections
+
+db.scooters.find().pretty()
+
+
+📌 API Endpoints (WIP)
+
+GET /scooters - List all scooters
+
+POST /scooters - Create a new scooter
+
+GET /maintenance - Get maintenance logs
+
+POST /maintenance - Add maintenance record
+
+(More endpoints coming soon...)
+
+📜 Clean Architecture Principles Used
+
+🛠️ Contributors
+
+@Honzikoi - Project Owner & Developer
+
+🚀 Happy Coding!

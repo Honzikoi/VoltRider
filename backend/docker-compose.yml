@@ -7,10 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://user:password@postgres:5432/voltride
-      - MONGODB_URL=mongodb://mongodb:27017/voltride
+    env_file:  # ✅ Load .env inside the backend container
+      - .env
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -19,7 +17,7 @@ services:
         condition: service_healthy
       mongodb:
         condition: service_healthy
-    command: sh -c "npm run build && npm run start:dev"
+    command: sh -c "npm run build && npm run start:dev && node dist/infrastructure/database/seed.ts"
 
   postgres:
     image: postgres:15-alpine
@@ -28,11 +26,14 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=voltride
+      - POSTGRES_DB=voltRideDB
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d  # Mount the init script
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d voltride"]
+      test: ["CMD-SHELL", "pg_isready -U user -d voltRideDB"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -48,6 +49,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: yourpassword
 
 volumes:
   postgres_data:
