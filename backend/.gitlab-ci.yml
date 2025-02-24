@@ -1,0 +1,50 @@
+# Define the stages of the pipeline
+stages:
+  - build
+  - test
+  - deploy
+
+# Build stage: Build the Docker containers using Docker Compose
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker info # Check if Docker is available
+    - docker-compose --version # Check Docker Compose version
+  script:
+    - docker-compose -f docker-compose.yml build # Build the containers
+  only:
+    - main # Run only on the main branch, adjust to your branch
+
+# Test stage: Run tests inside the Docker container
+test:
+  stage: test
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker info # Check if Docker is available
+    - docker-compose --version # Check Docker Compose version
+  script:
+    - docker-compose -f docker-compose.yml up -d # Start the services in the background
+    - docker-compose exec backend npm test # Run your tests (replace with actual test command)
+    - docker-compose down # Stop and remove containers
+  only:
+    - main # Run only on the main branch, adjust to your branch
+
+# Deploy stage: Example deployment step (can be customized for your setup)
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying to production"
+    - ./deploy.sh # Replace with your deployment script or steps
+  only:
+    - main # Run only on the main branch, adjust to your branch
+
+# Optional: You can define cache to speed up builds
+cache:
+  paths:
+    - node_modules/
+    - .npm/
