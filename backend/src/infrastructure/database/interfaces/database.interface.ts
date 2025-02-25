@@ -1,5 +1,5 @@
 export interface DatabaseConnection {
-    connect(): Promise<any>;
-    disconnect(): Promise<void>;
-    getClient(): any;
+  connect(): Promise<any>;
+  disconnect(): Promise<void>;
+  getClient(): any;
 }

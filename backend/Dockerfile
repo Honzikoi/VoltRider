@@ -8,8 +8,13 @@ RUN npm install
 
 COPY . .
 
+# Add entrypoint script
+COPY entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
 RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start:dev"]
+# Use entrypoint.sh as the startup command
+CMD ["sh", "/usr/src/app/entrypoint.sh"]

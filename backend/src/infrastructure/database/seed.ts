@@ -20,8 +20,12 @@ const seedPostgreSQL = async () => {
     const scooter = new Scooter();
     scooter.serialNumber = faker.string.uuid();
     scooter.model = faker.vehicle.model();
-    scooter.status = faker.helpers.arrayElement(['available', 'in_maintenance', 'broken']);
-    
+    scooter.status = faker.helpers.arrayElement([
+      'available',
+      'in_maintenance',
+      'broken',
+    ]);
+
     await dataSource.manager.save(scooter);
   }
 
@@ -36,8 +40,12 @@ const seedMongoDB = async () => {
   for (let i = 0; i < 10; i++) {
     const scooter = new MongoScooter({
       serialNumber: faker.string.uuid(),
-      model: faker.vehicle.model(),
-      status: faker.helpers.arrayElement(['available', 'in_maintenance', 'broken']),
+      scooterModel: faker.vehicle.model(),
+      status: faker.helpers.arrayElement([
+        'available',
+        'in_maintenance',
+        'broken',
+      ]),
       maintenanceHistory: [],
     });
 
